@@ -15,6 +15,7 @@ from src.api import global_
 from src.api.config import OPTIONS
 from src.api.constants import SCOPE
 from src.api.constants import CLASS
+from .id_ import SymbolID
 
 from .symbol_ import Symbol
 from .type_ import SymbolTYPE
@@ -25,7 +26,7 @@ from .type_ import SymbolTYPE
 # ----------------------------------------------------------------------
 
 
-class SymbolVAR(Symbol):
+class SymbolVAR(SymbolID):
     """Defines an VAR (Variable) symbol.
     These class and their children classes are also stored in the symbol
     table as table entries to store variable data
@@ -34,12 +35,9 @@ class SymbolVAR(Symbol):
     _class: CLASS = CLASS.unknown
 
     def __init__(self, varname: str, lineno: int, offset=None, type_=None, class_: CLASS = CLASS.unknown):
-        super().__init__()
+        super().__init__(name=varname, lineno=lineno, class_=class_)
 
-        self.name = varname
         self.filename = global_.FILENAME  # In which file was first used
-        self.lineno = lineno  # In which line was first used
-        self.class_ = class_  # variable "class": var, label, function, etc.
         self.mangled = "%s%s" % (global_.MANGLE_CHR, varname)  # This value will be overridden later
         self.declared = False  # if explicitly declared (DIM var AS <type>)
         self.type_ = type_  # if None => unknown type (yet)
